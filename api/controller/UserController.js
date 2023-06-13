@@ -89,12 +89,13 @@ module.exports = {
     console.log("getHigh20 requested");
 
     const Users = await UserModule.find();
+    console.log("users",Users);
     const FinalScores = [];
     Users.forEach((user) => {
       FinalScores.push({
         userScore: user.FinalScore,
         userTime: user.FinishTime,
-        username: UserName,
+        username: user.UserName,
       });
     });
     FinalScores.sort((a, b) => {
@@ -104,9 +105,12 @@ module.exports = {
         return b.userScore - a.userScore;
       }
     });
+    while(FinalScores.length>20){
+      FinalScores.pop();
+    }
     console.log("final scores arr : ", FinalScores);
     res.status(200).json({
-      finalscores: FinalScores.slice(0, FinalScores.length - 20),
+      finalscores: FinalScores,
     });
   },
   isFinished: async (req, res) => {
