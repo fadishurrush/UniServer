@@ -16,15 +16,9 @@ module.exports = {
       const user = await UserModule.findOne({ Phone });
 
       if (user) {
-        if (user.UserName === UserName.toLowerCase()) {
-          return res.status(200).json({
-            user: user,
-          });
-        } else {
-          return res.status(200).json({
-            message: "Phone number already used to a different user",
-          });
-        }
+        return res.status(200).json({
+          user: user,
+        });
       } else {
         const user = await UserModule.create({
           UserName: UserName.toLowerCase(),
@@ -89,14 +83,16 @@ module.exports = {
     console.log("getHigh20 requested");
 
     const Users = await UserModule.find();
-    console.log("users",Users);
+    console.log("users", Users);
     const FinalScores = [];
+    
     Users.forEach((user) => {
+      user.isFinished ?
       FinalScores.push({
         userScore: user.FinalScore,
         userTime: user.FinishTime,
         username: user.UserName,
-      });
+      }) : null ;
     });
     FinalScores.sort((a, b) => {
       if (b.userScore - a.userScore == 0) {
@@ -105,10 +101,30 @@ module.exports = {
         return b.userScore - a.userScore;
       }
     });
-    while(FinalScores.length>20){
+    while (FinalScores.length > 20) {
       FinalScores.pop();
     }
     console.log("final scores arr : ", FinalScores);
+    res.status(200).json({
+      finalscores: FinalScores,
+    });
+  },
+  getUsers: async (req, res) => {
+    console.log("getUsers requested");
+
+    const Users = await UserModule.find();
+    const FinalScores = [];
+    Users.forEach((user) => {
+      user.isFinished ?
+      FinalScores.push({
+        userScore: user.FinalScore,
+        username: user.UserName,
+      }) : null 
+    });
+    // sorts from highest to lowest
+    FinalScores.sort((a, b) => {
+      return b.userScore - a.userScore;
+    });
     res.status(200).json({
       finalscores: FinalScores,
     });
