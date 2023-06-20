@@ -261,4 +261,42 @@ module.exports = {
         console.log("get Correct Answeres error", e);
       });
   },
+  get19june:async (req,res)=>{
+    try {
+      const finalUsers=[];
+      const Users = await UserModule.find();
+    Users.forEach((user) => {
+      var time = new Date(user?.FinishTime) 
+        time?.getDate() == 19 ?
+        finalUsers.push(user) : null 
+    })
+    finalUsers.length>0 ?
+    res.status(200).json({Users:finalUsers}) :
+    res.status(200).json({message:"there is no users in 19 june"})
+
+
+    } catch (error) {
+      console.log("get19june error :" ,error);
+    }
+    
+  },
+  get20june:async (req,res)=>{
+    try {
+      const finalUsers=[];
+      const Users = await UserModule.find();
+    Users.forEach((user) => {
+      var time = new Date(user?.FinishTime) 
+        time?.getDate() == 20 ?
+        finalUsers.push(user) : null 
+    })
+    finalUsers.length>0 ?
+    res.status(200).json({Users:finalUsers}) :
+    res.status(200).json({message:"there is no users in 19 june"})
+
+
+    } catch (error) {
+      console.log("get19june error :" ,error);
+    }
+    
+  }
 };
